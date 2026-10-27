@@ -1,0 +1,231 @@
+body {
+  background: #f8f9fa;
+}
+
+.card img {
+  height: 200px;
+  object-fit: cover;
+}
+
+.home-wrapper {
+  background: #f8f9fa;
+  min-height: 100vh;
+}
+
+/* 🌟 HERO SECTION */
+.hero-section {
+  background: linear-gradient(135deg, #ff416c, #ff4b2b);
+  padding: 60px 20px;
+  border-bottom-left-radius: 30px;
+  border-bottom-right-radius: 30px;
+}
+
+.hero-section h1 {
+  font-size: 40px;
+  font-weight: bold;
+}
+
+.hero-section p {
+  opacity: 0.9;
+}
+
+/* 🧱 CARDS */
+.card {
+  border-radius: 12px;
+  border: none;
+}
+
+.summer-container {
+  padding: 40px 20px;
+}
+
+
+.summer-container h2 {
+  text-align: center;
+  font-size: 34px;
+  font-weight: bold;
+  color: #ff8c00;
+  margin-bottom: 35px;
+}
+
+
+/* Card */
+
+.summer-card {
+  border: none;
+  border-radius: 18px;
+  overflow: hidden;
+  background: white;
+  height: 100%;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.12);
+  transition: 0.3s;
+}
+
+
+.summer-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+
+.summer-card img {
+  height: 220px;
+  width: 100%;
+  object-fit: cover;
+}
+
+
+.summer-card .card-body {
+  padding: 18px;
+  text-align: center;
+}
+
+
+.summer-card h6 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+}
+
+
+/* Remove link underline */
+
+.summer-link {
+  text-decoration: none;
+}
+
+
+/* Mobile */
+
+@media(max-width:768px) {
+
+  .summer-container {
+    padding: 20px 10px;
+  }
+
+
+  .summer-container h2 {
+    font-size: 26px;
+  }
+
+
+  .summer-card img {
+    height: 190px;
+  }
+
+}
+
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 18px 40px;
+  background: #fff3e0;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+
+/* Logo left */
+
+.logo {
+  position: absolute;
+  left: 40px;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+
+/* Center links */
+
+.nav-center {
+  display: flex;
+  gap: 40px;
+}
+
+
+.nav-center a {
+  text-decoration: none;
+  color: #333;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+
+.nav-center a:hover {
+  color: orange;
+}
+
+
+/* Mobile */
+
+@media(max-width:768px) {
+
+  .navbar {
+    padding: 15px;
+  }
+
+  .logo {
+    position: static;
+    margin-bottom: 10px;
+  }
+
+  .nav-center {
+    gap: 20px;
+  }
+
+}
+.occasion-container {
+  padding: 40px 20px;
+}
+
+
+.occasion-container h1 {
+  text-align: center;
+  color: #e91e63;
+  margin-bottom: 40px;
+}
+
+
+.recipe-section {
+  margin-bottom: 50px;
+}
+
+
+.recipe-section h2 {
+  color: #ff8c00;
+  margin-bottom: 25px;
+}
+
+
+.occasion-card {
+  border: none;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.12);
+  transition: .3s;
+}
+
+
+.occasion-card:hover {
+  transform: translateY(-8px);
+}
+
+
+.occasion-card img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+}
+
+
+.occasion-card h6 {
+  text-align: center;
+  font-size: 17px;
+}
+
+
+.occasion-link {
+  text-decoration: none;
+  color: black;
+}
