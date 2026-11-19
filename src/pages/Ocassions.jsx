@@ -30,44 +30,58 @@ function Occasions() {
   ];
 
   useEffect(() => {
+    const delay = (ms) =>
+      new Promise((resolve) => setTimeout(resolve, ms));
+
+    const fetchCategory = async (category) => {
+      for (let attempt = 1; attempt <= 3; attempt++) {
+        try {
+          const response = await fetch(
+            `/meal-api/api/json/v1/1/filter.php?c=${encodeURIComponent(category)}`
+          );
+
+          if (!response.ok) {
+            throw new Error(`HTTP Error: ${response.status}`);
+          }
+
+          const data = await response.json();
+          return data.meals || [];
+        } catch (error) {
+          console.error(
+            `${category} attempt ${attempt} failed:`,
+            error
+          );
+
+          if (attempt < 3) {
+            await delay(1500);
+          }
+        }
+      }
+
+      return [];
+    };
+
     const fetchRecipes = async () => {
       try {
-        const results = await Promise.allSettled(
-          occasionSections.map(async (section) => {
-            const response = await fetch(
-              `https://www.themealdb.com/api/json/v1/1/filter.php?c=${encodeURIComponent(
-                section.category
-              )}`
-            );
+        const categoryData = {};
 
-            if (!response.ok) {
-              throw new Error("Failed to fetch recipes");
-            }
+        for (const section of occasionSections) {
+          if (!categoryData[section.category]) {
+            categoryData[section.category] =
+              await fetchCategory(section.category);
 
-            const data = await response.json();
-
-            return {
-              ...section,
-              recipes: data.meals
-                ? data.meals.slice(0, 12)
-                : [],
-            };
-          })
-        );
-
-        const successfulSections = results
-          .filter((result) => result.status === "fulfilled")
-          .map((result) => result.value);
-
-        setSections(successfulSections);
-
-        results.forEach((result) => {
-          if (result.status === "rejected") {
-            console.error("Occasion API Error:", result.reason);
+            await delay(1000);
           }
-        });
+        }
+
+        const result = occasionSections.map((section) => ({
+          ...section,
+          recipes: categoryData[section.category].slice(0, 12),
+        }));
+
+        setSections(result);
       } catch (error) {
-        console.log("Occasions Error:", error);
+        console.error("Occasions Error:", error);
       } finally {
         setLoading(false);
       }

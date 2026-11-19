@@ -9,17 +9,18 @@ function SummerRecipes() {
   useEffect(() => {
     const fetchSummerRecipes = async () => {
       try {
-        // Summer ke liye fresh/light recipes
         const categories = ["Seafood", "Vegetarian", "Pasta"];
 
         let allRecipes = [];
 
         for (const category of categories) {
           const response = await fetch(
-            `https://www.themealdb.com/api/json/v1/1/filter.php?c=${encodeURIComponent(
-              category
-            )}`
+            `/meal-api/api/json/v1/1/filter.php?c=${encodeURIComponent(category)}`
           );
+
+          if (!response.ok) {
+            throw new Error(`Failed to fetch ${category} recipes`);
+          }
 
           const data = await response.json();
 
@@ -99,4 +100,3 @@ function SummerRecipes() {
 }
 
 export default SummerRecipes;
-

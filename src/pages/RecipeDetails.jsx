@@ -10,16 +10,21 @@ function RecipeDetails() {
   const [isFav, setIsFav] = useState(false);
   const [error, setError] = useState("");
 
-  // Fetch recipe from TheMealDB
+  // Fetch recipe from TheMealDB through Vite proxy
   useEffect(() => {
     const fetchMeal = async () => {
       try {
         setLoading(true);
         setError("");
+        setMeal(null);
 
         const response = await fetch(
-          `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`
+          `/meal-api/api/json/v1/1/lookup.php?i=${encodeURIComponent(id)}`
         );
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch recipe");
+        }
 
         const data = await response.json();
 
@@ -30,7 +35,8 @@ function RecipeDetails() {
           setError("This recipe is not available in TheMealDB.");
         }
       } catch (err) {
-        setError("Unable to load recipe.");
+        console.error("Recipe Details Error:", err);
+        setError("Unable to load recipe. Please try again.");
       } finally {
         setLoading(false);
       }
@@ -230,4 +236,3 @@ function RecipeDetails() {
 }
 
 export default RecipeDetails;
-
