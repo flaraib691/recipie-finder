@@ -6,7 +6,6 @@ function Occasions() {
   const [sections, setSections] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Different sections ke liye TheMealDB categories
   const occasionSections = [
     {
       title: "🎂 Birthday Special",
@@ -33,28 +32,40 @@ function Occasions() {
   useEffect(() => {
     const fetchRecipes = async () => {
       try {
-        const result = [];
+        const results = await Promise.allSettled(
+          occasionSections.map(async (section) => {
+            const response = await fetch(
+              `https://www.themealdb.com/api/json/v1/1/filter.php?c=${encodeURIComponent(
+                section.category
+              )}`
+            );
 
-        for (const section of occasionSections) {
-          const response = await fetch(
-            `https://www.themealdb.com/api/json/v1/1/filter.php?c=${encodeURIComponent(
-              section.category
-            )}`
-          );
+            if (!response.ok) {
+              throw new Error("Failed to fetch recipes");
+            }
 
-          const data = await response.json();
+            const data = await response.json();
 
-          const recipes = data.meals
-            ? data.meals.slice(0, 12)
-            : [];
+            return {
+              ...section,
+              recipes: data.meals
+                ? data.meals.slice(0, 12)
+                : [],
+            };
+          })
+        );
 
-          result.push({
-            ...section,
-            recipes,
-          });
-        }
+        const successfulSections = results
+          .filter((result) => result.status === "fulfilled")
+          .map((result) => result.value);
 
-        setSections(result);
+        setSections(successfulSections);
+
+        results.forEach((result) => {
+          if (result.status === "rejected") {
+            console.error("Occasion API Error:", result.reason);
+          }
+        });
       } catch (error) {
         console.log("Occasions Error:", error);
       } finally {
@@ -75,7 +86,6 @@ function Occasions() {
 
   return (
     <div className="container occasion-container">
-
       <h1 className="text-center mb-5">
         🎉 Occasions
       </h1>
@@ -83,29 +93,24 @@ function Occasions() {
       {sections.map((section) => (
         <section
           className="recipe-section mb-5"
-          key={section.category}
+          key={section.title}
         >
-
           <h2 className="mb-4">
             {section.title}
           </h2>
 
           <div className="row">
-
             {section.recipes.map((meal) => (
               <div
                 className="col-lg-3 col-md-4 col-sm-6 mb-4"
                 key={meal.idMeal}
               >
-
                 <Link
                   to={`/recipe/${meal.idMeal}`}
                   state={{ meal }}
                   className="occasion-link"
                 >
-
                   <div className="card occasion-card h-100">
-
                     <img
                       src={meal.strMealThumb}
                       className="card-img-top"
@@ -117,22 +122,15 @@ function Occasions() {
                         {meal.strMeal}
                       </h6>
                     </div>
-
                   </div>
-
                 </Link>
-
               </div>
             ))}
-
           </div>
-
         </section>
       ))}
-
     </div>
   );
 }
 
 export default Occasions;
-

@@ -1,15 +1,29 @@
+
 import { useEffect, useState } from "react";
 
 export default function Categories({ onSelectCategory }) {
   const [categories, setCategories] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchCategories = async () => {
-      const res = await fetch(
-        "https://www.themealdb.com/api/json/v1/1/categories.php"
-      );
-      const data = await res.json();
-      setCategories(data.categories);
+      try {
+        const response = await fetch(
+          "https://www.themealdb.com/api/json/v1/1/categories.php"
+        );
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch categories");
+        }
+
+        const data = await response.json();
+        setCategories(data.categories || []);
+
+      } catch (error) {
+        console.error("Categories Error:", error);
+      } finally {
+        setLoading(false);
+      }
     };
 
     fetchCategories();
